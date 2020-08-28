@@ -1,8 +1,13 @@
 <% if current_user %>
   <h1><%= current_user.username %></h1>
+  <%= link_to "Profile", user_path(current_user) %>
   <%= link_to "Sign Out", destroy_user_session_path, method: :delete %>
   <%= link_to "Edit", edit_user_registration_path %>
 <% else %>
   <%= link_to "Sign Up", new_user_registration_path  %>
   <%= link_to "Sign In", new_user_session_path %>
+<% end %>
+<br>
+<% User.all.each do |u| %>
+  <%= link_to u.username, user_path(u.id) %><br>
 <% end %>
