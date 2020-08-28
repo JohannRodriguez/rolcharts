@@ -4,6 +4,7 @@ class CharactersController < ApplicationController
   end
 
   def show
+    @character = Character.find(params[:id])
   end
 
   def new
@@ -27,12 +28,25 @@ class CharactersController < ApplicationController
   end
 
   def edit
+    @character = Character.find(params[:id])
   end
 
   def update
+    @character = Character.find(params[:id])
+    if @character.update(character_params)
+      flash.notice = 'Character succsesfully edited'
+      redirect_to character_path(params[:id])
+    else
+      flash.alert = @character.errors.full_messages
+      render :edit
+    end
   end
 
   def destroy
+    @character = Character.find(params[:id])
+    @character.destroy
+    flash.notice = 'Character deleted'
+    redirect_to user_path(current_user)
   end
 
   private

@@ -2,5 +2,5 @@
 <%= link_to 'New Character', new_character_path %><br>
 <%= link_to 'Profile', user_path(current_user) %><br>
 <% @user.characters.each do |character| %>
-  <%= character.name %><br>
+  <%= link_to character.name, character_path(character.id) %><br>
 <% end %>

@@ -1,2 +1,4 @@
-<h1>Characters#show</h1>
-<p>Find me in app/views/characters/show.html.erb</p>
+<h2><%= @character.name %></h2>
+<p><%= @character.description %></p>
+<%= link_to "Edit character", edit_character_path(@character.id) %>
+<%= link_to "Delete character", character_path(params[:id]), method: :delete, data: { confirm: 'Are you sure you want to delete this? This action can\'t be undone'} %>

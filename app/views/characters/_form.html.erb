@@ -1,0 +1,7 @@
+<%= form_for @character do |f| %>
+  Character Name:<br>
+  <%= f.text_field :name %><br>
+  Character Description:<br>
+  <%= f.text_area :description %><br>
+  <%= f.submit "Create Charachter" %>
+<% end %>
