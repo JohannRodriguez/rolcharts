@@ -12,18 +12,13 @@ class CharactersController < ApplicationController
   end
 
   def create
-    @character = current_user.characters.new(character_params)
-    if !Character.where(user_id: current_user, name: character_params[:name]).empty?
-      flash.alert = 'You already have this character'
+    @character = current_user.characters.build(character_params)
+    if @character.save
+      flash.notice = 'Character succesfully created'
+      redirect_to characters_path
+    else  
+      flash.alert = @character.errors.full_messages
       render :new
-    else
-      if @character.save
-        flash.alert = 'Character succesfully created'
-        redirect_to characters_path
-      else  
-        flash[:notice] = @character.errors.full_messages
-        render :new
-      end
     end
   end
 
