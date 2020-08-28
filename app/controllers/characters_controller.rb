@@ -16,7 +16,7 @@ class CharactersController < ApplicationController
     if @character.save
       flash.notice = 'Character succesfully created'
       redirect_to characters_path
-    else  
+    else
       flash.alert = @character.errors.full_messages
       render :new
     end
