@@ -1,0 +1,6 @@
+<h1><%= @user.username %>'s Charatcers</h1>
+<%= link_to 'New Character', new_character_path %><br>
+<%= link_to 'Profile', user_path(current_user) %><br>
+<% @user.characters.each do |character| %>
+  <%= character.name %><br>
+<% end %>
