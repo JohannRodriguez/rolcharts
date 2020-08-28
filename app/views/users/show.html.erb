@@ -1,2 +1,8 @@
 <h1><%= @user.username %></h1>
+<h2><%= @user.impersonating %></h2>
 <%= link_to "Characters", characters_path %>
+<%= form_for @user do |f| %>
+  <%= f.label 'Who am I today?' %><br>
+  <%= f.select :impersonating, @user.characters.all.collect { |c| [c.name, c.name]  }, include_blank: @user.username %><br>
+  <%= f.submit "Update Character" %>
+<% end %>

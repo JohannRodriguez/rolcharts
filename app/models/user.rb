@@ -1,5 +1,8 @@
 class User < ApplicationRecord
   has_many :characters
+  NULL_ATTRS = %w( impersonating )
+  before_save :nil_if_blank
+  validate :validate_username
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -20,11 +23,15 @@ class User < ApplicationRecord
     end
   end
 
-  validate :validate_username
-
   def validate_username
     if User.where(email: username).exists?
       errors.add(:username, :invalid)
     end
+  end
+
+  protected
+
+  def nil_if_blank
+    NULL_ATTRS.each { |attr| self[attr] = nil if self[attr].blank? }
   end
 end
