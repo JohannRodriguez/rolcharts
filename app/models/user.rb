@@ -1,8 +1,12 @@
 class User < ApplicationRecord
-  has_many :characters
   NULL_ATTRS = %w[impersonating].freeze
-  before_save :nil_if_blank
+
   validate :validate_username
+  before_save :nil_if_blank
+  
+  has_one_attached :avatar
+  has_one_attached :cover_photo
+  has_many :characters
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -28,11 +32,12 @@ class User < ApplicationRecord
   # rubocop:enable Layout/EmptyLineBetweenDefs
   # rubocop:enable Lint/AssignmentInCondition
 
+  protected
+
   def validate_username
     return errors.add(:username, :invalid) if User.where(email: username).exists?
   end
 
-  protected
 
   def nil_if_blank
     NULL_ATTRS.each { |attr| self[attr] = nil if self[attr].blank? }

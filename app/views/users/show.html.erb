@@ -1,8 +1,28 @@
+<% if @user.avatar.attached? %>
+  <div style="border: 3px solid blue; width: 200px; height: 200px; overflow: hidden; border-radius: 50%;">
+    <%= image_tag @user.avatar %>
+  </div>
+<% end %>
+<% if @user.cover_photo.attached? %>
+  <%= image_tag @user.cover_photo.variant(resize: '500x500') %>
+<% end %>
 <h1><%= @user.username %></h1>
 <h2><%= @user.impersonating %></h2>
 <%= link_to "Characters", characters_path %>
 <%= form_for @user do |f| %>
-  <%= f.label 'Who am I today?' %><br>
-  <%= f.select :impersonating, @user.characters.all.collect { |c| [c.name, c.name]  }, include_blank: @user.username %><br>
-  <%= f.submit "Update Character" %>
+  <div>
+    <%= f.label :cover_photo %>
+    <%= f.file_field :cover_photo %>
+  </div>
+
+  <div>
+    <%= f.label :avatar %>
+    <%= f.file_field :avatar %>
+  </div>
+
+  <div>
+    <%= f.label 'Who am I today?' %><br>
+    <%= f.select :impersonating, @user.characters.all.collect { |c| [c.name, c.name]  }, include_blank: @user.username %><br>
+    <%= f.submit "Update Character" %>
+  </div>
 <% end %>
