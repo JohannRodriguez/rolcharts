@@ -32,12 +32,22 @@ class User < ApplicationRecord
   # rubocop:enable Layout/EmptyLineBetweenDefs
   # rubocop:enable Lint/AssignmentInCondition
 
+  def avatar_resize
+    if avatar.attached?
+      @resize = MiniMagick::Image.read(avatar.download)
+      @resize = @resize.resize '200x200^'
+      @filename = avatar.filename
+      @content_type = avatar.content_type
+      avatar.purge
+      avatar.attach(io: File.open(@resize.path), filename:  @filename, content_type: @content_type)
+    end
+  end
+
   protected
 
   def validate_username
     return errors.add(:username, :invalid) if User.where(email: username).exists?
   end
-
 
   def nil_if_blank
     NULL_ATTRS.each { |attr| self[attr] = nil if self[attr].blank? }
