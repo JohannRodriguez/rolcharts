@@ -2,6 +2,8 @@ class User < ApplicationRecord
   NULL_ATTRS = %w[impersonating].freeze
 
   validate :validate_username
+  validate :validate_avatar
+  validate :validate_cover_photo
   before_save :nil_if_blank
   
   has_one_attached :avatar
@@ -44,6 +46,14 @@ class User < ApplicationRecord
   end
 
   protected
+
+  def validate_avatar
+    return errors.add(:avatar, :invalid) if !avatar.blob.content_type.starts_with?('image/')
+  end
+
+  def validate_cover_photo
+    return errors.add(:cover_photo, :invalid) if !cover_photo.blob.content_type.starts_with?('image/')
+  end
 
   def validate_username
     return errors.add(:username, :invalid) if User.where(email: username).exists?
