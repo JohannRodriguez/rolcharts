@@ -5,7 +5,7 @@ class User < ApplicationRecord
   validate :validate_avatar
   validate :validate_cover_photo
   before_save :nil_if_blank
-  
+
   has_one_attached :avatar
   has_one_attached :cover_photo
   has_many :characters
@@ -34,6 +34,7 @@ class User < ApplicationRecord
   # rubocop:enable Layout/EmptyLineBetweenDefs
   # rubocop:enable Lint/AssignmentInCondition
 
+  # rubocop:disable Style/GuardClause
   def avatar_resize
     if avatar.attached?
       @resize = MiniMagick::Image.read(avatar.download)
@@ -41,18 +42,19 @@ class User < ApplicationRecord
       @filename = avatar.filename
       @content_type = avatar.content_type
       avatar.purge
-      avatar.attach(io: File.open(@resize.path), filename:  @filename, content_type: @content_type)
+      avatar.attach(io: File.open(@resize.path), filename: @filename, content_type: @content_type)
     end
   end
+  # rubocop:enable Style/GuardClause
 
   protected
 
   def validate_avatar
-    return errors.add(:avatar, :invalid) if !avatar.blob.content_type.starts_with?('image/')
+    return errors.add(:avatar, :invalid) unless avatar.blob.content_type.starts_with?('image/')
   end
 
   def validate_cover_photo
-    return errors.add(:cover_photo, :invalid) if !cover_photo.blob.content_type.starts_with?('image/')
+    return errors.add(:cover_photo, :invalid) unless cover_photo.blob.content_type.starts_with?('image/')
   end
 
   def validate_username
